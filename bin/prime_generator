@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+require File.expand_path('../../lib/prime_number_generator', __FILE__)
+require File.expand_path('../../lib/matrix', __FILE__)
+require File.expand_path('../../lib/matrix_render', __FILE__)
+
+require 'optparse'
+prime_number_arg = 10
+if ARGV.count > 1 || (prime_number_arg = (ARGV.first || "10").to_i) <= 0
+  puts "Usage:  prime_generator [count]"
+  puts "        count ::= positive integer representing the number of primes to generate"
+  exit
+end
+
+primes = PrimeNumberGenerator.new({start_number:0}).create_primes(prime_number_arg)
+matrix = Matrix.new({x:primes, y:primes}).generate_multiplication_matrix
+view = MatrixRender.new({output:STDOUT,
+                             title:"",
+                             vertical_header:primes,
+                             horizontal_header:primes})
+
+view.render(matrix)
